@@ -28,7 +28,7 @@ class Client(commands.Bot):
             synced = await self.tree.sync(guild=GUILD_ID)
             print(f"Synced {len(synced)} commands to {GUILD_ID.id}")
 
-        except Exception as e:
+        except ValueError as e:
             print(f"Error syncing commands: {e}")
 
     async def on_message(self, message: discord.Message):
