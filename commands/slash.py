@@ -9,7 +9,6 @@ class SlashCommands(commands.Cog):
 
     @app_commands.command(name="slash", description="test slash")
     async def intro(self, interaction: discord.Interaction):
-        # send str
         await interaction.response.send_message("test slash")
 
 
