@@ -26,28 +26,34 @@ class Client(commands.Bot):
         except Exception as e:
             print(f"Error syncing commands: {e}")
 
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         if message.author == self.user:
             return
 
-        if message.content.startswith("lux"):
-            await message.channel.send(
-                f"Hello, {message.author}! I am Luxie. I am your best friend who's always there for you 24/7! Luxie is always right beside you, smiling in the dark, counting the pause between your each breath to see how much of you is left to collect!"
-            )
+        await self.process_commands(message)
 
 
 intents = discord.Intents.default()
 intents.message_content = True
 
-client = Client(command_prefix="!", intents=intents)
+client = Client(command_prefix=commands.when_mentioned_or("lux "), intents=intents)
 
 
+# NOTE: inline commands
+@client.command(name="introduction")
+async def hello(ctx: commands.Context):
+    await ctx.send(
+        f"Hello, {ctx.author.mention}! I am Luxie. \n\nLong before Luxie arrived at GDG, Luxie was a Starlight Fragment floating through the digital cosmos, which is a tiny comet powered by curiosity, lighted spirit, and the collective energy of student developers around the world. \n\nWhen Haribot (the bot guardian of PLM's GDG community) was soaring through the digital skyline, looking for a way to guide aspiring student developers, a bright spark flashed across the night sky. \n\nHaribot flew up to meet it, and the two connected instantly. Haribot provided strength, wisdom, and local heritage, while Luxie brought sparkling innovation, speed, and light to illuminate the beauty of networks."
+    )
+
+
+# NOTE: slash commands
 @client.tree.command(
     name="introduction", description="Get to know Luxie!", guild=GUILD_ID
 )
 async def introduction(interaction: discord.Interaction):
     await interaction.response.send_message(
-        f"Hello, {interaction.user.mention}! I am Luxie. Long before Luxie arrived at GDG, Luxie was a Starlight Fragment floating through the digital cosmos, which is a tiny comet powered by curiosity, lighted spirit, and the collective energy of student developers around the world. When Haribot (the bot guardian of PLM's GDG community) was soaring through the digital skyline, looking for a way to guide aspiring student developers, a bright spark flashed across the night sky. Haribot flew up to meet it, and the two connected instantly. Haribot provided strength, wisdom, and local heritage, while Luxie brought sparkling innovation, speed, and light to illuminate the beauty of networks."
+        f"Hello, {interaction.user.mention}! I am Luxie. \n\nLong before Luxie arrived at GDG, Luxie was a Starlight Fragment floating through the digital cosmos, which is a tiny comet powered by curiosity, lighted spirit, and the collective energy of student developers around the world. \n\nWhen Haribot (the bot guardian of PLM's GDG community) was soaring through the digital skyline, looking for a way to guide aspiring student developers, a bright spark flashed across the night sky. \n\nHaribot flew up to meet it, and the two connected instantly. Haribot provided strength, wisdom, and local heritage, while Luxie brought sparkling innovation, speed, and light to illuminate the beauty of networks."
     )
 
 
