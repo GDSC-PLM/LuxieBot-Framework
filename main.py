@@ -1,5 +1,4 @@
 import os
-from re import A
 
 import discord
 from discord import app_commands
