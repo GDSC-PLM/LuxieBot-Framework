@@ -8,12 +8,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-token = os.getenv("DISCORD_TOKEN")
+TOKEN = os.environ["DISCORD_TOKEN"]
+GUILD_ID = discord.Object(os.environ["GUILD_ID"])
 
-GUILD_ID = discord.Object(id=1534840767338516642)
-
-if token is None:
-    raise ValueError("Create .env file, and ask your leads for the discord token!")
+if not TOKEN or not GUILD_ID:
+    raise ValueError("Create .env file, and ask your leads for the credentials!")
 
 
 class Client(commands.Bot):
@@ -76,4 +75,4 @@ async def embed(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed)
 
 
-client.run(token)
+client.run(TOKEN)
