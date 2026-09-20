@@ -1,25 +1,30 @@
-import os
-
 import discord
 from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 
+from constants import GUILD_ID, TOKEN
+
 load_dotenv()
 
-
-TOKEN = os.environ["DISCORD_TOKEN"]
-GUILD_ID = discord.Object(os.environ["GUILD_ID"])
 
 if not TOKEN or not GUILD_ID:
     raise ValueError("Create .env file, and ask your leads for the credentials!")
 
 
 class Client(commands.Bot):
+    async def setup_hook(self) -> None:
+        extensions = ["commands.hybrid", "commands.prefix", "commands.slash"]
+
+        for ext in extensions:
+            await self.load_extension(ext)
+            print(f"Loaded extension: {ext}")
+
     async def on_ready(self):
         print(f"Logged in as {self.user}!")
 
         try:
+            self.tree.copy_global_to(guild=GUILD_ID)
             synced = await self.tree.sync(guild=GUILD_ID)
             print(f"Synced {len(synced)} commands to {GUILD_ID.id}")
 
@@ -39,52 +44,7 @@ intents.message_content = True
 client = Client(command_prefix=commands.when_mentioned_or("lux "), intents=intents)
 
 
-# NOTE: inline commands
-@client.command(name="introduction")
-async def hello(ctx: commands.Context):
-    await ctx.send(
-        f"Hello, {ctx.author.mention}! I am Luxie. \n\nLong before Luxie arrived at GDG, Luxie was a Starlight Fragment floating through the digital cosmos, which is a tiny comet powered by curiosity, lighted spirit, and the collective energy of student developers around the world. \n\nWhen Haribot (the bot guardian of PLM's GDG community) was soaring through the digital skyline, looking for a way to guide aspiring student developers, a bright spark flashed across the night sky. \n\nHaribot flew up to meet it, and the two connected instantly. Haribot provided strength, wisdom, and local heritage, while Luxie brought sparkling innovation, speed, and light to illuminate the beauty of networks."
-    )
-
-
-# NOTE: slash commands
-@client.tree.command(
-    name="introduction", description="Get to know Luxie!", guild=GUILD_ID
-)
-async def introduction(interaction: discord.Interaction):
-    await interaction.response.send_message(
-        f"Hello, {interaction.user.mention}! I am Luxie. \n\nLong before Luxie arrived at GDG, Luxie was a Starlight Fragment floating through the digital cosmos, which is a tiny comet powered by curiosity, lighted spirit, and the collective energy of student developers around the world. \n\nWhen Haribot (the bot guardian of PLM's GDG community) was soaring through the digital skyline, looking for a way to guide aspiring student developers, a bright spark flashed across the night sky. \n\nHaribot flew up to meet it, and the two connected instantly. Haribot provided strength, wisdom, and local heritage, while Luxie brought sparkling innovation, speed, and light to illuminate the beauty of networks."
-    )
-
-
-@client.tree.command(name="printer", description="I am gaya gaya", guild=GUILD_ID)
-async def printer(interaction: discord.Interaction, printer: str):
-    await interaction.response.send_message(printer)
-
-
-@client.tree.command(name="embed", description="Embedable tings", guild=GUILD_ID)
-async def embed(interaction: discord.Interaction):
-    embed = discord.Embed(
-        title="Lux",
-        url="https://app.notion.com/library/favorites?spaceId=fb82cb6005844ce195739779dc9a4d98",
-        description="I am your guiding light!",
-        color=discord.Color.blue(),
-    )
-    embed.set_thumbnail(
-        url="https://preview.redd.it/opinions-about-momo-as-a-character-v0-aqgnvh6l2sug1.jpg?width=640&crop=smart&auto=webp&s=128b2a8c516ecf74187257dd1aa793377725e01f"
-    )
-    embed.add_field(name="field test", value="i love momo ayase", inline=False)
-    embed.add_field(name="test 2", value="i love momo ayase", inline=False)
-    embed.add_field(name="test 3", value="i love momo ayase 2", inline=False)
-    embed.set_footer(text="am a footer!")
-    embed.set_author(
-        name=interaction.user.name,
-        url="https://app.notion.com/library/favorites?spaceId=fb82cb6005844ce195739779dc9a4d98",
-        icon_url="https://preview.redd.it/opinions-about-momo-as-a-character-v0-aqgnvh6l2sug1.jpg?width=640&crop=smart&auto=webp&s=128b2a8c516ecf74187257dd1aa793377725e01f",
-    )
-    await interaction.response.send_message(embed=embed)
-
-
+# NOTE: BUTTONS
 class View(discord.ui.View):
     @discord.ui.button(
         label="Click me daddy", style=discord.ButtonStyle.red, emoji="🥳"
@@ -110,6 +70,7 @@ async def myButton(interaction: discord.Interaction):
     await interaction.response.send_message(view=View())
 
 
+# NOTE: DROP DOWN MENU
 class Menu(discord.ui.Select):
     def __init__(self):
         options = [
