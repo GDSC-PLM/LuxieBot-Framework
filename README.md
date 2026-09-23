@@ -76,6 +76,19 @@ cd ./services/core/
 python -m venv .venv
 ```
 
+#### Select Python Interpreter (VS Code)
+
+This is important because you'd want your IDE to recognize imports and such.
+
+```
+CTRL + Shift + P
+Look for "Python: Select Interpreter"
+Enter interpreter path...
+Find...
+Locate the .venv folder within LuxieBot-Framework
+Open the Scripts folder inside, and then look for Python.exe
+```
+
 #### Activate the Virtual Environment
 
 Depending on your machine, run **one** of the following:
