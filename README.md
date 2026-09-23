@@ -51,7 +51,7 @@ bun run start
 #### Navigate to Dashboard
 
 ```bash
-# Assuming you're currently in /luxie-framework/services/bot/
+# Assuming you're currently in /LuxieBot-Framework/services/bot/
 cd ../
 cd ./services/dashboard
 ```
