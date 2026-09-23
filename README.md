@@ -4,12 +4,12 @@ This bot is about making the GDGoC discord server more lively and easier to navi
 
 ## Table of Contents
 
-- [Architecture](#architecture)
-  - [Frontend](#frontend)
-  - [Backend](#backend)
-- [Environment Setup](#environment-setup)
-  - [Spin up Discord Bot and Dashboard](#spin-up-discord-bot-and-dashboard)
-  - [Spin up Python Backend](#spin-up-python-backend)
+| Section                                        | Component / Sub-section                                       | Description                                         |
+| :--------------------------------------------- | :------------------------------------------------------------ | :-------------------------------------------------- |
+| 🏗️ **[Architecture](#architecture)**           | [Frontend](#frontend)                                         | Discord.js bot & Next.js dashboard stack            |
+|                                                | [Backend](#backend)                                           | Bun runtime, FastAPI core, and Docker orchestration |
+| ⚙️ **[Environment Setup](#environment-setup)** | [Discord Bot & Dashboard](#spin-up-discord-bot-and-dashboard) | Step-by-step setup using Bun                        |
+|                                                | [Python Backend](#spin-up-python-backend)                     | Virtual environment and dependency configuration    |
 
 ## Architecture
 
@@ -51,6 +51,8 @@ bun run start
 #### Navigate to Dashboard
 
 ```bash
+# Assuming you're currently in /luxie-framework/services/bot/
+cd ../
 cd ./services/dashboard
 ```
 
@@ -76,7 +78,7 @@ python -m venv .venv
 
 #### Activate the Virtual Environment
 
-Depending on your operating system, run **one** of the following:
+Depending on your machine, run **one** of the following:
 
 - **Linux / macOS:**
   ```bash
