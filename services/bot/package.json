@@ -8,5 +8,9 @@
   },
   "peerDependencies": {
     "typescript": "^7"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "bun ./dist/index.js"
   }
 }
