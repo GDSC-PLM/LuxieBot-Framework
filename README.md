@@ -2,6 +2,15 @@
 
 This bot is about making the GDGoC discord server more lively and easier to navigate. It’s being developed to integrate the organizations’ main resources (mainly Notion) to have a better experience for Googlers and Nooglers alike. This is catered for all members of the organization, with varying read and write permissions.
 
+## Table of Contents
+
+- [Architecture](#architecture)
+  - [Frontend](#frontend)
+  - [Backend](#backend)
+- [Environment Setup](#environment-setup)
+  - [Spin up Discord Bot and Dashboard](#spin-up-discord-bot-and-dashboard)
+  - [Spin up Python Backend](#spin-up-python-backend)
+
 ## Architecture
 
 The Luxie Framework uses a monorepo + microservices setup that power its frontend and backend.
@@ -19,19 +28,53 @@ The Luxie Framework uses a monorepo + microservices setup that power its fronten
 
 ## Environment Setup
 
-### Navigate to Python Backend
+### Spin up Discord Bot and Dashboard
+
+#### Navigate to Discord Bot
+
+```bash
+cd ./services/bot
+```
+
+#### Build Bot
+
+```bash
+bun run build
+```
+
+#### Start Bot
+
+```bash
+bun run start
+```
+
+#### Navigate to Dashboard
+
+```bash
+cd ./services/dashboard
+```
+
+#### Start Dashboard
+
+```bash
+bun run dev
+```
+
+### Spin up Python Backend
+
+#### Navigate to Python Backend
 
 ```bash
 cd ./services/core/
 ```
 
-### Create Virtual Environment (venv)
+#### Create Virtual Environment (venv)
 
 ```bash
 python -m venv .venv
 ```
 
-### Activate the Virtual Environment
+#### Activate the Virtual Environment
 
 Depending on your operating system, run **one** of the following:
 
@@ -48,7 +91,7 @@ Depending on your operating system, run **one** of the following:
   .venv\Scripts\activate.bat
   ```
 
-### Install Dependencies
+#### Install Dependencies
 
 Make sure your virtual environment is active before running this:
 
