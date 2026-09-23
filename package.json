@@ -1,0 +1,8 @@
+{
+  "name": "luxie-framework",
+  "private": true,
+  "workspaces": [
+    "services/*",
+    "shared/*"
+  ]
+}
