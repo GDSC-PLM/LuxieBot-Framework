@@ -3,6 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "dependencies": {
+    "@luxie-framework/sdk": "workspace:*"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },

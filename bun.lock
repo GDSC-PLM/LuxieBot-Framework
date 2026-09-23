@@ -7,6 +7,9 @@
     },
     "services/bot": {
       "name": "luxie-bot",
+      "dependencies": {
+        "@luxie-framework/sdk": "workspace:*",
+      },
       "devDependencies": {
         "@types/bun": "latest",
       },
@@ -18,6 +21,7 @@
       "name": "luxie-dashboard",
       "version": "0.1.0",
       "dependencies": {
+        "@luxie-framework/sdk": "workspace:*",
         "next": "16.3.6",
         "react": "19.2.8",
         "react-dom": "19.2.8",
@@ -35,7 +39,7 @@
       },
     },
     "shared/sdk": {
-      "name": "@luxie/sdk",
+      "name": "@luxie-framework/sdk",
       "version": "1.0.0",
       "devDependencies": {
         "typescript": "^7",
@@ -179,7 +183,7 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
-    "@luxie/sdk": ["@luxie/sdk@workspace:shared/sdk"],
+    "@luxie-framework/sdk": ["@luxie-framework/sdk@workspace:shared/sdk"],
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.2.4", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^1.7.1 || ^2.0.0-alpha.4", "@emnapi/runtime": "^1.7.1 || ^2.0.0-alpha.4" } }, "sha512-AJxoUD2/15ESHbvpcyjU274nsAPLuOtPHCk0vKJM5pj//Fg/B1FXNWjPnXTT9PymCYYiHo4zPj0ZomXBKhoy7g=="],
 
