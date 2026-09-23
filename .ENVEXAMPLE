@@ -1,0 +1,8 @@
+# PLEASE DO NOT PUSH THE ACTUAL .ENV FILE
+
+# Discord Bot-specific Variables
+
+DISCORD_TOKEN=
+GUILD_ID=
+
+# DB
