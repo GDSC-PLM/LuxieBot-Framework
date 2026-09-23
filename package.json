@@ -4,5 +4,9 @@
   "workspaces": [
     "services/*",
     "shared/*"
-  ]
+  ],
+  "scripts": {
+    "build": "",
+    "run": ""
+  }
 }
