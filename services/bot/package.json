@@ -1,5 +1,5 @@
 {
-  "name": "luxiebot",
+  "name": "luxie-bot",
   "module": "index.ts",
   "type": "module",
   "private": true,
