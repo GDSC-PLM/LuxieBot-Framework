@@ -48,7 +48,7 @@ Depending on your operating system, run **one** of the following:
   .venv\Scripts\activate.bat
   ```
 
-#### Install Dependencies
+### Install Dependencies
 
 Make sure your virtual environment is active before running this:
 
