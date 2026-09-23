@@ -1,3 +1,6 @@
+# DX
+uv
+
 # API & Backend Infrastructure
 notion-client
 python-dotenv>=1.0.0
