@@ -2,7 +2,9 @@
 
 # Discord Bot-specific Variables
 
-DISCORD_TOKEN=
+BOT_TOKEN=
 GUILD_ID=
+NOTION_TOKEN=
+CLIENT_ID
 
 # DB

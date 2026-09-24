@@ -4,7 +4,14 @@
   "type": "module",
   "private": true,
   "dependencies": {
-    "@luxie-framework/sdk": "workspace:*"
+    "@luxie-framework/sdk": "workspace:*",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/ws": "^8.18.1",
+    "discord.js": "^14.27.0",
+    "dotenv": "^18.0.3",
+    "i": "^0.3.7",
+    "jsonwebtoken": "^9.0.3",
+    "ws": "^8.21.3"
   },
   "devDependencies": {
     "@types/bun": "latest"

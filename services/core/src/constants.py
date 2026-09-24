@@ -8,7 +8,7 @@ import discord
 load_dotenv()
 
 # discord things
-TOKEN = os.environ["DISCORD_TOKEN"]
+TOKEN = os.environ["BOT_TOKEN"]
 GUILD_ID = discord.Object(os.environ["GUILD_ID"])
 
 # internal data

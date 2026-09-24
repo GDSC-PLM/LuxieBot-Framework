@@ -9,9 +9,7 @@
     "types": ["bun"],
 
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
-    "noEmit": true,
 
     "strict": true,
     "skipLibCheck": true,
@@ -28,6 +26,10 @@
 
     "paths": {
       "@/*": ["./src/*"]
-    }
-  }
+    },
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
