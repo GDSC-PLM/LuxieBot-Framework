@@ -29,13 +29,13 @@ export class BackendService {
     this.client = client;
     this.ws?.removeAllListeners();
 
-    const apiToken = process.env.APITOKEN;
-    const clientHeader = process.env.CLIENTHEADER;
-    const jwtSecret = process.env.JWTSECRET;
+    const apiToken = process.env.API_TOKEN;
+    const clientHeader = process.env.CLIENT_HEADER;
+    const jwtSecret = process.env.JWT_SECRET;
 
     if (!apiToken || !clientHeader || !jwtSecret) {
       console.error(
-        "CRITICAL: APITOKEN, CLIENTHEADER, or JWTSECRET is missing from environment variables.",
+        "CRITICAL: API_TOKEN, CLIENT_HEADER, or JWT_SECRET is missing from environment variables.",
       );
       return;
     }

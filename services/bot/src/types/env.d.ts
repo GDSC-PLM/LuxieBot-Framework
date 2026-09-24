@@ -7,6 +7,7 @@ declare global {
       DB_URI: string;
       WS_URL?: string;
       API_TOKEN: string;
+      CLIENT_HEADER: string;
       JWT_SECRET: string;
     }
   }

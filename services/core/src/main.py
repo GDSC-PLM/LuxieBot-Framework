@@ -1,4 +1,5 @@
 import os # used to load env variables
+from pathlib import Path
 import time # used for dql
 import uuid # random identifiers
 import jwt # for access tokens
@@ -14,8 +15,10 @@ import valkey.asyncio as valkey # concurrency + off-load stuff to memory
 from api.rest import router as rest_router # custom rest api logic goes here
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect # rest api
 from fastapi.middleware.cors import CORSMiddleware # lets the react website/dashboard access the server
-from db.db_factory import db # to initialize database
-from api.websockets import ROUTES # custom websocket logic goes here
+# from db.db_factory import db # to initialize database
+# from api.websockets import ROUTES # custom websocket logic goes here
+
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 class ServerEnv(BaseSettings):
     token: str = Field(alias="API_TOKEN")
@@ -24,7 +27,7 @@ class ServerEnv(BaseSettings):
     jwt_secret: SecretStr = Field(alias="JWT_SECRET")
     origins: str = Field(alias="ORIGINS")
     model_config = SettingsConfigDict(
-        env_file=".env", 
+        env_file=ROOT_DIR / ".env",
         extra="ignore"
     )
 
@@ -91,7 +94,7 @@ class Server:
         if not self.TOKEN or not self.HEADER or not self.VALKEYURL or not self.JWTSECRET or not self.ORIGINS:
             raise ValueError("FATAL ERROR: Environment variables are not set or empty in .env file.")
         
-        self.ROUTES = ROUTES
+        #self.ROUTES = ROUTES
         self.app = FastAPI(lifespan=self.lifespan)
         self.app.include_router(rest_router)
         self.app.add_middleware(
@@ -113,7 +116,7 @@ class Server:
     @asynccontextmanager
     async def lifespan(self, app: FastAPI):
         logging.info("Initializing database indexes...")
-        await db.initialize_all()
+        #await db.initialize_all()
         logging.info("Connecting to Valkey...")
         self.vk = valkey.from_url(self.VALKEYURL, decode_responses=True)
         self.limiter = DistributedRateLimiter(self.vk, max_actions=25, timeframe=1.0)
