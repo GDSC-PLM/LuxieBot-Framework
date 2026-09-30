@@ -45,7 +45,11 @@ The Luxie Framework uses a polyglot monorepo + microservices setup that power it
 
 ## Environment Setup
 
-### Spin up Discord Bot and Dashboard
+### Recommended - Docker Compose
+
+TODO
+
+### Manual Setup - Spin up Discord Bot and Dashboard
 
 #### Navigate to Discord Bot
 
