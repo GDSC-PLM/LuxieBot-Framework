@@ -50,27 +50,29 @@ The Luxie Framework uses a polyglot monorepo + microservices setup that power it
 
 TODO
 
-### Manual Setup - Spin up Discord Bot and Dashboard
+### Manual Setup
 
-#### Navigate to Discord Bot
+#### Spin up Discord Bot and Dashboard
+
+##### Navigate to Discord Bot
 
 ```bash
 cd ./services/bot
 ```
 
-#### Build Bot
+##### Build Bot
 
 ```bash
 bun run build
 ```
 
-#### Start Bot
+##### Start Bot
 
 ```bash
 bun run start
 ```
 
-#### Navigate to Dashboard
+##### Navigate to Dashboard
 
 ```bash
 # Assuming you're currently in /LuxieBot-Framework/services/bot/
@@ -78,27 +80,27 @@ cd ../
 cd ./services/dashboard
 ```
 
-#### Start Dashboard
+##### Start Dashboard
 
 ```bash
 bun run dev
 ```
 
-### Spin up Python Backend
+#### Spin up Python Backend
 
-#### Navigate to Python Backend
+##### Navigate to Python Backend
 
 ```bash
 cd ./services/core/
 ```
 
-#### Create Virtual Environment (venv)
+##### Create Virtual Environment (venv)
 
 ```bash
 python -m venv .venv
 ```
 
-#### Select Python Interpreter (VS Code)
+##### Select Python Interpreter (VS Code)
 
 This is important because you'd want your IDE to recognize imports and such.
 
@@ -111,7 +113,7 @@ Locate the .venv folder within LuxieBot-Framework
 Open the Scripts folder inside, and then look for Python.exe
 ```
 
-#### Activate the Virtual Environment
+##### Activate the Virtual Environment
 
 Depending on your machine, run **one** of the following:
 
@@ -128,7 +130,7 @@ Depending on your machine, run **one** of the following:
   .venv\Scripts\activate.bat
   ```
 
-#### Install Dependencies
+##### Install Dependencies
 
 Make sure your virtual environment is active before running this:
 
