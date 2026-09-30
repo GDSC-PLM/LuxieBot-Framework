@@ -1,4 +1,4 @@
-# Overview
+# Luxie Framework
 
 This bot is about making the GDGoC discord server more lively and easier to navigate. It’s being developed to integrate the organizations’ main resources (mainly Notion) to have a better experience for Googlers and Nooglers alike. This is catered for all members of the organization, with varying read and write permissions.
 
@@ -11,9 +11,26 @@ This bot is about making the GDGoC discord server more lively and easier to navi
 | **[Environment Setup](#environment-setup)** | [Discord Bot & Dashboard](#spin-up-discord-bot-and-dashboard) | Step-by-step setup using Bun                        |
 |                                             | [Python Backend](#spin-up-python-backend)                     | Virtual environment and dependency configuration    |
 
+## Overview
+
+```
+root
+├── services
+│    ├── bot
+│    ├── dashboard
+│    └── core
+└── shared/sdk/@luxie-framework/sdk
+```
+
+The `services` folder contains all the microservices needed for Luxie to run.
+
+- `bot` is a node/bun module. It runs the Discord Bot API via Discord.js.
+- `dashboard` is also a node/bun module. It uses Next.js to display a role-based dashboard where users can login via OAuth; admins can freely modify the bot behavior and rewards, whereas normal users can login to view their status in the GDGoC Discord Server.
+- `core` is a Python backend. It uses JWT authorization to manage both the `bot` and `dashboard` sessions.
+
 ## Architecture
 
-The Luxie Framework uses a monorepo + microservices setup that power its frontend and backend.
+The Luxie Framework uses a polyglot monorepo + microservices setup that power its frontend and backend.
 
 ### Frontend
 
