@@ -4,13 +4,12 @@ This bot is about making the GDGoC discord server more lively and easier to navi
 
 ## Table of Contents
 
-| Section                                     | Component / Sub-section                                       | Description                                         |
-| :------------------------------------------ | :------------------------------------------------------------ | :-------------------------------------------------- |
-| **[Architecture](#architecture)**           | [Frontend](#frontend)                                         | Discord.js bot & Next.js dashboard stack            |
-|                                             | [Backend](#backend)                                           | Bun runtime, FastAPI core, and Docker orchestration |
-| **[Environment Setup](#environment-setup)** | [Docker Compose](#recommended---docker-compose)               | All-in-one orchestrator                             |
-|                                             | [Discord Bot & Dashboard](#spin-up-discord-bot-and-dashboard) | Step-by-step setup using Bun                        |
-|                                             | [Python Backend](#spin-up-python-backend)                     | Virtual environment and dependency configuration    |
+| Section                                     | Component / Sub-section                         | Description                                         |
+| :------------------------------------------ | :---------------------------------------------- | :-------------------------------------------------- |
+| **[Architecture](#architecture)**           | [Frontend](#frontend)                           | Discord.js bot & Next.js dashboard stack            |
+|                                             | [Backend](#backend)                             | Bun runtime, FastAPI core, and Docker orchestration |
+| **[Environment Setup](#environment-setup)** | [Docker Compose](#recommended---docker-compose) | All-in-one orchestrator                             |
+|                                             | [Discord Bot & Dashboard](#manual-setup)        | Step-by-step setup using Bun and Python             |
 
 ## Overview
 
