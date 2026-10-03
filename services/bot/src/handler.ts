@@ -28,9 +28,7 @@ export async function load_components(client: LuxieBotClient) {
       const component = componentModule.default || componentModule;
 
       if (!("data" in component) || !("execute" in component)) {
-        console.log(
-          `[WARNING] Component at ${filePath} is missing "data" or "execute".`,
-        );
+        console.log(`[WARNING] Component at ${filePath} is missing "data" or "execute".`);
         continue;
       }
       switch (folder) {
@@ -99,15 +97,11 @@ export async function deploy_cmds(clientId: string, guildId?: string) {
   const rest = new REST().setToken(process.env.BOT_TOKEN as string);
   (async () => {
     try {
-      console.log(
-        `Started refreshing ${commands.length} application (/) commands.`,
-      );
+      console.log(`Started refreshing ${commands.length} application (/) commands.`);
       const data: any = await rest.put(Routes.applicationCommands(clientId), {
         body: commands,
       });
-      console.log(
-        `Successfully reloaded ${data.length} application (/) commands.`,
-      );
+      console.log(`Successfully reloaded ${data.length} application (/) commands.`);
     } catch (error) {
       console.error(error);
     }

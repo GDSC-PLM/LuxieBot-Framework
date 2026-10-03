@@ -65,26 +65,19 @@ const command: ChatCommand = {
       }
 
       const cmdName = targetCmd.data?.name || specifier;
-      const cmdDesc =
-        targetCmd.data?.description || "No description available.";
+      const cmdDesc = targetCmd.data?.description || "No description available.";
       const cmdUsage = targetCmd.usage || `/${cmdName}`;
 
       const embed = new ContainerBuilder()
         .setAccentColor(0xffa500)
+        .addTextDisplayComponents(new TextDisplayBuilder().setContent(`**Help | /${cmdName}**`))
+        .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
         .addTextDisplayComponents(
-          new TextDisplayBuilder().setContent(`**Help | /${cmdName}**`),
+          new TextDisplayBuilder().setContent(`${cmdDesc}\n\n**Usage** - \`${cmdUsage}\``),
         )
         .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
         .addTextDisplayComponents(
-          new TextDisplayBuilder().setContent(
-            `${cmdDesc}\n\n**Usage** - \`${cmdUsage}\``,
-          ),
-        )
-        .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
-        .addTextDisplayComponents(
-          new TextDisplayBuilder().setContent(
-            `*Requested by ${interaction.user.tag}*`,
-          ),
+          new TextDisplayBuilder().setContent(`*Requested by ${interaction.user.tag}*`),
         );
 
       return await interaction.editReply({
@@ -97,9 +90,7 @@ const command: ChatCommand = {
 
     commands.forEach((cmd) => {
       const categoryName =
-        cmd.tag && typeof cmd.tag === "string"
-          ? cmd.tag.toLowerCase()
-          : "uncategorized";
+        cmd.tag && typeof cmd.tag === "string" ? cmd.tag.toLowerCase() : "uncategorized";
       const category = categoriesMap.get(categoryName) || [];
       category.push(cmd);
       categoriesMap.set(categoryName, category);
@@ -126,15 +117,10 @@ const command: ChatCommand = {
         return embed;
       }
 
-      const [currentCategory, currentCommands] = categoryArray[pageIndex] || [
-        "",
-        [],
-      ];
+      const [currentCategory, currentCommands] = categoryArray[pageIndex] || ["", []];
 
       embed.addTextDisplayComponents(
-        new TextDisplayBuilder().setContent(
-          `**${currentCategory.toUpperCase()}**`,
-        ),
+        new TextDisplayBuilder().setContent(`**${currentCategory.toUpperCase()}**`),
       );
 
       currentCommands.forEach((cmd) => {
@@ -152,9 +138,7 @@ const command: ChatCommand = {
       embed
         .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
         .addTextDisplayComponents(
-          new TextDisplayBuilder().setContent(
-            `*Requested by ${interaction.user.tag}*`,
-          ),
+          new TextDisplayBuilder().setContent(`*Requested by ${interaction.user.tag}*`),
         );
 
       return embed;

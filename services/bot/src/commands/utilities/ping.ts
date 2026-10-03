@@ -16,8 +16,7 @@ const command: ChatCommand = {
     .setDescription("Pings the bot and shows connection latency"),
   async execute(interaction) {
     const sent = await interaction.deferReply({ withResponse: true });
-    const responseTimestamp =
-      sent.resource?.message?.createdTimestamp ?? Date.now();
+    const responseTimestamp = sent.resource?.message?.createdTimestamp ?? Date.now();
     const roundtripLatency = responseTimestamp - interaction.createdTimestamp;
     const websocketLatency = interaction.client.ws.ping;
 
@@ -25,23 +24,15 @@ const command: ChatCommand = {
 
     const embed = new ContainerBuilder()
       .setAccentColor(accentColor)
+      .addTextDisplayComponents(new TextDisplayBuilder().setContent("**Pong!**"))
+      .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
       .addTextDisplayComponents(
-        new TextDisplayBuilder().setContent("**Pong!**"),
+        new TextDisplayBuilder().setContent(`**Bot Latency:** \`${roundtripLatency}ms\``),
+        new TextDisplayBuilder().setContent(`**API Latency:** \`${websocketLatency}ms\``),
       )
       .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
       .addTextDisplayComponents(
-        new TextDisplayBuilder().setContent(
-          `**Bot Latency:** \`${roundtripLatency}ms\``,
-        ),
-        new TextDisplayBuilder().setContent(
-          `**API Latency:** \`${websocketLatency}ms\``,
-        ),
-      )
-      .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
-      .addTextDisplayComponents(
-        new TextDisplayBuilder().setContent(
-          `*Requested by ${interaction.user.tag}*`,
-        ),
+        new TextDisplayBuilder().setContent(`*Requested by ${interaction.user.tag}*`),
       );
 
     await interaction.editReply({

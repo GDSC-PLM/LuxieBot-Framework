@@ -11,9 +11,7 @@ export default {
     console.log(`Ready! Logged in as ${client.user?.tag}`);
     client.wsRequests = new Map();
 
-    const wsUrl = WSURL.replace(/^https?/, (match) =>
-      match === "https" ? "wss" : "ws",
-    );
+    const wsUrl = WSURL.replace(/^https?/, (match) => (match === "https" ? "wss" : "ws"));
 
     if (client.user) {
       BackendService.getInstance().connect(client, wsUrl, client.user.id);

@@ -4,5 +4,9 @@
   "workspaces": [
     "services/*",
     "shared/*"
-  ]
+  ],
+  "scripts": {
+    "fmt:check": "oxfmt --check",
+    "fmt": "oxfmt"
+  }
 }
