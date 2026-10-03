@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@luxie-framework/sdk": "workspace:*",
+    "@notionhq/client": "^5.27.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/ws": "^8.18.1",
     "discord.js": "^14.27.0",
