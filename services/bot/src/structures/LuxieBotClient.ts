@@ -1,4 +1,5 @@
 import { Client, GatewayIntentBits, Collection } from "discord.js";
+import { Client as NotionClient } from "@notionhq/client";
 import type {
   ChatCommand,
   Command,
@@ -18,8 +19,13 @@ export class LuxieBotClient extends Client {
   public selectMenus: Collection<string, ComponentHandler> = new Collection();
   public wsBridge?: WebSocket;
   public wsRequests: Map<string, WsRequestDetails> = new Map();
+  public notion?: NotionClient;
 
   constructor() {
     super({ intents: [GatewayIntentBits.Guilds] });
+
+    if (process.env.NOTION_TOKEN) {
+      this.notion = new NotionClient({ auth: process.env.NOTION_TOKEN });
+    }
   }
 }
