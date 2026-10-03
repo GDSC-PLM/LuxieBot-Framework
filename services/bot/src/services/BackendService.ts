@@ -50,11 +50,9 @@ export class BackendService {
     this.ws.on("open", () => {
       console.log("Connected to Python Backend via WebSocket!");
 
-      const handshakeToken = jwt.sign(
-        { sub: botId, type: "discord_bot" },
-        jwtSecret,
-        { expiresIn: "1m" },
-      );
+      const handshakeToken = jwt.sign({ sub: botId, type: "discord_bot" }, jwtSecret, {
+        expiresIn: "1m",
+      });
 
       this.ws?.send(
         JSON.stringify({
@@ -71,10 +69,7 @@ export class BackendService {
       try {
         const payload = JSON.parse(data.toString());
 
-        if (
-          payload.interaction_id &&
-          this.client.wsRequests.has(payload.interaction_id)
-        ) {
+        if (payload.interaction_id && this.client.wsRequests.has(payload.interaction_id)) {
           const request = this.client.wsRequests.get(payload.interaction_id);
           if (request) {
             clearTimeout(request.timer);
@@ -114,20 +109,14 @@ export class BackendService {
     });
   }
 
-  public dispatch(
-    payload: BackendRequest,
-    timeoutMs: number = 15000,
-  ): Promise<BackendResponse> {
+  public dispatch(payload: BackendRequest, timeoutMs: number = 15000): Promise<BackendResponse> {
     if (!this.ws || this.ws.readyState !== this.ws.OPEN) {
-      return Promise.reject(
-        new Error("The backend service is currently offline."),
-      );
+      return Promise.reject(new Error("The backend service is currently offline."));
     }
 
     return new Promise((resolve, reject) => {
       const interactionId = payload.interaction_id;
-      if (!interactionId)
-        return reject(new Error("Payload missing interaction_id"));
+      if (!interactionId) return reject(new Error("Payload missing interaction_id"));
 
       const timer = setTimeout(() => {
         this.client.wsRequests.delete(interactionId);
@@ -159,9 +148,7 @@ export class BackendService {
     const data = await this.dispatch(payload);
 
     if (data.error) {
-      throw new BackendError(
-        data.message || "An unknown error occurred on the backend.",
-      );
+      throw new BackendError(data.message || "An unknown error occurred on the backend.");
     }
 
     const successData = data as BackendSuccessResponse;

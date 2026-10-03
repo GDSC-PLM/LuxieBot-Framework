@@ -28,8 +28,7 @@ async function handleCooldown(
   const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1000;
 
   if (timestamps.has(interaction.user.id)) {
-    const expirationTime =
-      timestamps.get(interaction.user.id)! + cooldownAmount;
+    const expirationTime = timestamps.get(interaction.user.id)! + cooldownAmount;
     if (now < expirationTime) {
       const expiredTimestamp = Math.round(expirationTime / 1000);
 
@@ -67,13 +66,9 @@ async function handleError(error: unknown, interaction: any) {
 
   const embed = new ContainerBuilder()
     .setAccentColor(0xffa500)
-    .addTextDisplayComponents(
-      new TextDisplayBuilder().setContent("**Luxie | Error**"),
-    )
+    .addTextDisplayComponents(new TextDisplayBuilder().setContent("**Luxie | Error**"))
     .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
-    .addTextDisplayComponents(
-      new TextDisplayBuilder().setContent(`${content}`),
-    );
+    .addTextDisplayComponents(new TextDisplayBuilder().setContent(`${content}`));
 
   const replyPayload = {
     components: [embed],
@@ -124,11 +119,7 @@ export default {
         return;
       }
 
-      const commandCooldown: boolean = await handleCooldown(
-        client,
-        interaction,
-        command,
-      );
+      const commandCooldown: boolean = await handleCooldown(client, interaction, command);
       if (commandCooldown == true) return;
 
       try {
@@ -141,8 +132,7 @@ export default {
       interaction.isModalSubmit() ||
       interaction.isAnySelectMenu()
     ) {
-      if (interaction.isButton() && interaction.customId.startsWith("help_"))
-        return;
+      if (interaction.isButton() && interaction.customId.startsWith("help_")) return;
 
       const baseId = interaction.customId.includes(":")
         ? interaction.customId.split(":")[0]
@@ -158,9 +148,7 @@ export default {
               : undefined;
 
         if (!component) {
-          console.warn(
-            `No collection mapping found for Custom ID: "${interaction.customId}"`,
-          );
+          console.warn(`No collection mapping found for Custom ID: "${interaction.customId}"`);
           return;
         }
 

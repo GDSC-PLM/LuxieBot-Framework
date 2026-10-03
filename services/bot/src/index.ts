@@ -5,12 +5,7 @@ dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 
 import { Events, Guild } from "discord.js";
 import { LuxieBotClient } from "@/structures/LuxieBotClient";
-import {
-  load_components,
-  load_cmds,
-  deploy_cmds,
-  load_events,
-} from "@/handler";
+import { load_components, load_cmds, deploy_cmds, load_events } from "@/handler";
 
 const client = new LuxieBotClient();
 const token = process.env.BOT_TOKEN;
@@ -19,12 +14,7 @@ const guildId = process.env.GUILD_ID;
 
 async function start() {
   try {
-    if (
-      client == null ||
-      token == null ||
-      clientId == null ||
-      guildId == null
-    ) {
+    if (client == null || token == null || clientId == null || guildId == null) {
       console.error("Environment variables are not set.");
       return;
     }
