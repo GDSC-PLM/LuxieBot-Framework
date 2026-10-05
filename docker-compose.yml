@@ -1,0 +1,12 @@
+services:
+  bot:
+    container_name: luxie-bot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - TZ=Asia/Manila

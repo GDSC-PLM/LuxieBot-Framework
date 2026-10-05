@@ -47,7 +47,19 @@ The Luxie Framework uses a polyglot monorepo + microservices setup that power it
 
 ### Recommended - Docker Compose
 
-TODO
+Using Docker Compose is a fast way to run the bot:
+
+##### Build and Start Discord Bot
+
+```bash
+docker compose up
+```
+
+##### Stop the Discord Bot
+
+```bash
+docker compose down
+```
 
 ### Manual Setup
 
@@ -117,14 +129,19 @@ Open the Scripts folder inside, and then look for Python.exe
 Depending on your machine, run **one** of the following:
 
 - **Linux / macOS:**
+
   ```bash
   source .venv/bin/activate
   ```
+
 - **Windows (PowerShell):**
+
   ```powershell
   .venv\Scripts\Activate.ps1
   ```
+
 - **Windows (Command Prompt):**
+
   ```cmd
   .venv\Scripts\activate.bat
   ```
