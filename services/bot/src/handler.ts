@@ -93,15 +93,15 @@ export async function load_events(client: LuxieBotClient) {
   }
 }
 
-export async function deploy_cmds(clientId: string, guildId?: string) {
+export async function deploy_cmds(clientId: string, guildId: string) {
   const rest = new REST().setToken(process.env.BOT_TOKEN as string);
   (async () => {
     try {
-      console.log(`Started refreshing ${commands.length} application (/) commands.`);
-      const data: any = await rest.put(Routes.applicationCommands(clientId), {
+      console.log(`Started refreshing ${commands.length} application (/) commands in ${guildId}.`);
+      const data: any = await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
         body: commands,
       });
-      console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+      console.log(`Successfully reloaded ${data.length} application (/) commands in ${guildId}.`);
     } catch (error) {
       console.error(error);
     }
