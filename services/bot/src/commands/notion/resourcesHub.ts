@@ -8,6 +8,10 @@ import {
   ButtonStyle,
   ComponentType,
   MessageFlags,
+  ModalBuilder,
+  LabelBuilder,
+  TextInputBuilder,
+  TextInputStyle,
 } from "discord.js";
 import { type ChatCommand } from "@/types/discord";
 import { type LuxieBotClient } from "@/structures/LuxieBotClient";
@@ -55,9 +59,38 @@ interface ResourceItem {
   title: string;
   url: string;
   category: string;
-  status: string;
   about: string;
   submittedBy: string;
+}
+
+interface CreateResourceInput {
+  title: string;
+  url: string;
+  category: string;
+  about: string;
+  userNotionEmail: string;
+}
+
+async function getUserEmail(notion: any, email: string) {
+  let cursor: string | undefined = undefined;
+
+  do {
+    const response: any = await notion.users.list({
+      start_cursor: cursor,
+      page_size: 100,
+    });
+
+    const user = response.results.find(
+      (u: any) =>
+        u.type === "person" && u.person.email.toLowerCase() === email.trim().toLowerCase(),
+    );
+
+    if (user) return user;
+
+    cursor = response.has_more ? response.next_cursor : undefined;
+  } while (cursor);
+
+  return null;
 }
 
 async function fetchResources(notion: any) {
@@ -75,16 +108,65 @@ async function fetchResources(notion: any) {
 
       const url = props["Resource Link"].url;
       const category = props["Category"].multi_select.map((c: any) => c.name).join(", ");
-      const status = props["Status"].status.name;
       const about = props["About"].rich_text.map((t: any) => t.plain_text).join("");
       const submittedBy = props["Submitted By"].people.map((u: any) => u.name);
 
-      items.push({ title, url, category, status, about, submittedBy });
+      items.push({ title, url, category, about, submittedBy });
     }
     return items;
   } catch {
     return [];
   }
+}
+
+async function addResources(notion: any, input: CreateResourceInput) {
+  const notionUser = await getUserEmail(notion, input.userNotionEmail);
+  if (!notionUser) {
+    throw new Error(`No Notion account matching \`${input.userNotionEmail}\``);
+  }
+
+  return await notion.pages.create({
+    parent: {
+      database_id: DATABASE_ID,
+    },
+    properties: {
+      "Resource Name": {
+        title: [
+          {
+            text: {
+              content: input.title,
+            },
+          },
+        ],
+      },
+      Category: {
+        multi_select: [
+          {
+            name: input.category,
+          },
+        ],
+      },
+      "Submitted By": {
+        people: [
+          {
+            id: notionUser.id,
+          },
+        ],
+      },
+      "Resource Link": {
+        url: input.url,
+      },
+      About: {
+        rich_text: [
+          {
+            text: {
+              content: input.about,
+            },
+          },
+        ],
+      },
+    },
+  });
 }
 
 function formatResources(resources: ResourceItem[]): string {
@@ -95,14 +177,14 @@ function formatResources(resources: ResourceItem[]): string {
   return resources
     .map((r: ResourceItem, i: number): string => {
       const link = `[${r.title}](${r.url})`;
-      const metadata = `**Category:** \`${r.category}\`\n**Status:** \`${r.status}\`\n**By:** \`${r.submittedBy}\``;
+      const metadata = `**Category:** \`${r.category}\`\n**By:** \`${r.submittedBy}\``;
       const description = `\n> ${r.about}`;
       return `### ${i + 1}. ${link}\n${metadata}${description}`;
     })
     .join("\n\n");
 }
 
-function buildButtons(activeTab: "overview" | "resources", disabled = false) {
+function buildButtons(activeTab: "overview" | "resources" | "submit", disabled = false) {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId("tab_resources")
@@ -114,14 +196,23 @@ function buildButtons(activeTab: "overview" | "resources", disabled = false) {
       .setLabel("Overview")
       .setStyle(activeTab === "overview" ? ButtonStyle.Primary : ButtonStyle.Secondary)
       .setDisabled(disabled || activeTab === "overview"),
+    new ButtonBuilder()
+      .setCustomId("tab_submit")
+      .setLabel("Submit")
+      .setStyle(activeTab === "submit" ? ButtonStyle.Primary : ButtonStyle.Secondary)
+      .setDisabled(disabled || activeTab === "submit"),
   );
 }
 
-function buildContainer(activeTab: "overview" | "resources", content: string, disabled = false) {
+function buildContainer(
+  activeTab: "overview" | "resources" | "submit",
+  content: string,
+  disabled = false,
+) {
   const container = new ContainerBuilder()
     .setAccentColor(0x2f3438)
     .addTextDisplayComponents(
-      new TextDisplayBuilder().setContent(`📋 [**GDGoC PLM Resources Hub**](${RESOURCES_HUB_URL})`),
+      new TextDisplayBuilder().setContent(`[**GDGoC PLM Resources Hub**](${RESOURCES_HUB_URL})`),
     )
     .addTextDisplayComponents(new TextDisplayBuilder().setContent(content))
     .addActionRowComponents(buildButtons(activeTab, disabled));
@@ -179,12 +270,95 @@ const command: ChatCommand = {
           });
         }
 
-        currentTab = i.customId === "tab_resources" ? "resources" : "overview";
-        const content = currentTab === "resources" ? resourcesText : OVERVIEW;
+        if (i.customId === "tab_resources" || i.customId === "tab_overview") {
+          currentTab = i.customId === "tab_resources" ? "resources" : "overview";
+          const content = currentTab === "resources" ? resourcesText : OVERVIEW;
+          const updated = buildContainer(currentTab, content);
+          return await i.update({ components: [updated] });
+        }
 
-        const updated = buildContainer(currentTab, content);
+        if (i.customId === "tab_submit") {
+          const modal = new ModalBuilder()
+            .setCustomId("modal_submit_resource")
+            .setTitle("Submit Resource to Notion")
+            .addLabelComponents(
+              new LabelBuilder()
+                .setLabel("Resource Title")
+                .setTextInputComponent(
+                  new TextInputBuilder()
+                    .setCustomId("res_title")
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(true),
+                ),
+              new LabelBuilder()
+                .setLabel("Resource URL")
+                .setTextInputComponent(
+                  new TextInputBuilder()
+                    .setCustomId("res_url")
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(true),
+                ),
+              new LabelBuilder()
+                .setLabel("Category")
+                .setDescription("Refer to Overview for a complete list")
+                .setTextInputComponent(
+                  new TextInputBuilder()
+                    .setCustomId("res_category")
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(true),
+                ),
+              new LabelBuilder()
+                .setLabel("Your Notion Email")
+                .setTextInputComponent(
+                  new TextInputBuilder()
+                    .setCustomId("res_email")
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(true),
+                ),
+              new LabelBuilder()
+                .setLabel("About / Description")
+                .setTextInputComponent(
+                  new TextInputBuilder()
+                    .setCustomId("res_about")
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setRequired(false),
+                ),
+            );
 
-        await i.update({ components: [updated] });
+          await i.showModal(modal);
+
+          try {
+            const modalSubmission = await i.awaitModalSubmit({
+              filter: (sub) =>
+                sub.customId === "modal_submit_resource" && sub.user.id === interaction.user.id,
+              time: 300000,
+            });
+
+            await modalSubmission.deferReply({ flags: MessageFlags.Ephemeral });
+
+            const title = modalSubmission.fields.getTextInputValue("res_title");
+            const url = modalSubmission.fields.getTextInputValue("res_url");
+            const category = modalSubmission.fields.getTextInputValue("res_category");
+            const email = modalSubmission.fields.getTextInputValue("res_email");
+            const about = modalSubmission.fields.getTextInputValue("res_about");
+
+            await addResources(botClient.notion, {
+              title,
+              url,
+              category,
+              about,
+              userNotionEmail: email,
+            });
+
+            await modalSubmission.editReply({
+              content: `Successfully submitted [${title}](${url}) to Notion!`,
+            });
+          } catch (err: any) {
+            if (err.code !== "InteractionCollectorError") {
+              console.error("Failed to submit resource:", err);
+            }
+          }
+        }
       });
 
       collector.on("end", async () => {
