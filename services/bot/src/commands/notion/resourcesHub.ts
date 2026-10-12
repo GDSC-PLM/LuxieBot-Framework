@@ -12,6 +12,8 @@ import {
   LabelBuilder,
   TextInputBuilder,
   TextInputStyle,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
 } from "discord.js";
 import { type ChatCommand } from "@/types/discord";
 import { type LuxieBotClient } from "@/structures/LuxieBotClient";
@@ -43,7 +45,7 @@ const OVERVIEW = `This is our official, living knowledge base built **by the com
 🗃️ **Curated External Resource Lists**
   \`Collections of genuinely useful outside links and playlists.\`
 
-📋 **Templates:**
+📋 **Templates**
   \`Reusable starting points for common deliverables.\`
 
 🗂️ **Project Docs & PAR Archives**
@@ -54,6 +56,40 @@ const OVERVIEW = `This is our official, living knowledge base built **by the com
 
 ▶️ **Recorded Walkthroughs** 
   \`Short screen recordings for processes that are easier to show than explain in text.\``;
+
+const CATEGORY_OPTIONS = [
+  { label: "Reviewers", value: "Reviewers", emoji: "📝" },
+  {
+    label: "Documentation & Language",
+    value: "Documentation & Language",
+    emoji: "📃",
+  },
+  { label: "Platforms & Tools", value: "Platforms & Tools", emoji: "🛠️" },
+  { label: "Cheat Sheets", value: "Cheat Sheets", emoji: "🚀" },
+  {
+    label: "Notes on Past Subjects/Sessions",
+    value: "Notes on Past Subjects/Sessions",
+    emoji: "📒",
+  },
+  { label: "Tutorials & Guides", value: "Tutorials & Guides", emoji: "🧭" },
+  {
+    label: "Curated External Resource Lists",
+    value: "Curated External Resource Lists",
+    emoji: "🗃️",
+  },
+  { label: "Templates", value: "Templates", emoji: "📋" },
+  {
+    label: "Project Docs & PAR Archives",
+    value: "Project Docs & PAR Archives",
+    emoji: "🗂️",
+  },
+  { label: "Career & Opportunity", value: "Career & Opportunity", emoji: "💼" },
+  {
+    label: "Recorded Walkthroughs",
+    value: "Recorded Walkthroughs",
+    emoji: "▶️",
+  },
+] as const;
 
 interface ResourceItem {
   title: string;
@@ -298,15 +334,20 @@ const command: ChatCommand = {
                     .setStyle(TextInputStyle.Short)
                     .setRequired(true),
                 ),
-              new LabelBuilder()
-                .setLabel("Category")
-                .setDescription("Refer to Overview for a complete list")
-                .setTextInputComponent(
-                  new TextInputBuilder()
-                    .setCustomId("res_category")
-                    .setStyle(TextInputStyle.Short)
-                    .setRequired(true),
-                ),
+              new LabelBuilder().setLabel("Category").setStringSelectMenuComponent(
+                new StringSelectMenuBuilder()
+                  .setCustomId("res_category")
+                  .setPlaceholder("Select a category")
+                  .setRequired(true)
+                  .addOptions(
+                    CATEGORY_OPTIONS.map((c) =>
+                      new StringSelectMenuOptionBuilder()
+                        .setLabel(c.label)
+                        .setValue(c.value)
+                        .setEmoji(c.emoji),
+                    ),
+                  ),
+              ),
               new LabelBuilder()
                 .setLabel("Your Notion Email")
                 .setTextInputComponent(
@@ -316,7 +357,7 @@ const command: ChatCommand = {
                     .setRequired(true),
                 ),
               new LabelBuilder()
-                .setLabel("About / Description")
+                .setLabel("About")
                 .setTextInputComponent(
                   new TextInputBuilder()
                     .setCustomId("res_about")
@@ -338,7 +379,7 @@ const command: ChatCommand = {
 
             const title = modalSubmission.fields.getTextInputValue("res_title");
             const url = modalSubmission.fields.getTextInputValue("res_url");
-            const category = modalSubmission.fields.getTextInputValue("res_category");
+            const category = modalSubmission.fields.getStringSelectValues("res_category")[0] ?? "";
             const email = modalSubmission.fields.getTextInputValue("res_email");
             const about = modalSubmission.fields.getTextInputValue("res_about");
 
