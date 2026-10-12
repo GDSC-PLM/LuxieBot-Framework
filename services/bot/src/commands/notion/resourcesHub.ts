@@ -321,7 +321,7 @@ const command: ChatCommand = {
                   new TextInputBuilder()
                     .setCustomId("res_about")
                     .setStyle(TextInputStyle.Paragraph)
-                    .setRequired(false),
+                    .setRequired(true),
                 ),
             );
 
