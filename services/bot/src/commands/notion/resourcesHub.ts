@@ -383,20 +383,35 @@ const command: ChatCommand = {
             const email = modalSubmission.fields.getTextInputValue("res_email");
             const about = modalSubmission.fields.getTextInputValue("res_about");
 
-            await addResources(botClient.notion, {
-              title,
-              url,
-              category,
-              about,
-              userNotionEmail: email,
-            });
+            try {
+              await addResources(botClient.notion, {
+                title,
+                url,
+                category,
+                about,
+                userNotionEmail: email,
+              });
 
-            await modalSubmission.editReply({
-              content: `Successfully submitted [${title}](${url}) to Notion!`,
-            });
+              await modalSubmission.editReply({
+                content: `Successfully submitted [${title}](${url}) to Notion!`,
+              });
+            } catch (err: any) {
+              console.error("Failed to submit resource:", err);
+
+              const errorContainer = new ContainerBuilder()
+                .setAccentColor(0xff0000)
+                .addTextDisplayComponents(new TextDisplayBuilder().setContent("## Notion Error"))
+                .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
+                .addTextDisplayComponents(new TextDisplayBuilder().setContent(err.message));
+
+              await modalSubmission.editReply({
+                flags: MessageFlags.IsComponentsV2,
+                components: [errorContainer],
+              });
+            }
           } catch (err: any) {
             if (err.code !== "InteractionCollectorError") {
-              console.error("Failed to submit resource:", err);
+              console.error("Failed to collect modal submission:", err);
             }
           }
         }
